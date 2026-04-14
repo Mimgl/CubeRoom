@@ -36,7 +36,7 @@ app
       console.log("Socket connected:", socket.id);
 
       socket.on("join_room", ({ roomId, playerId, playerName }) => {
-        let room = getRoom(roomId);
+        let room = getRoom(roomId) || null;
 
         if (!room) {
           room = createRoomIfMissing(roomId, playerId, playerName);
