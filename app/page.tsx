@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getDiscordActivityContext } from "@/lib/discord";
 
 function generateRoomCode(length = 6) {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -30,36 +29,6 @@ export default function HomePage() {
   const [playerName, setPlayerName] = useState("");
   const [joinCode, setJoinCode] = useState("");
   const [error, setError] = useState("");
-  const [bootingDiscord, setBootingDiscord] = useState(true);
-
-  useEffect(() => {
-    const savedName = localStorage.getItem("cube-racer-player-name");
-    if (savedName) {
-      setPlayerName(savedName);
-    }
-
-    async function bootDiscord() {
-      try {
-        console.log("Getting discord status")
-        const ctx = await getDiscordActivityContext();
-        console.log(ctx)
-        if (ctx.isDiscord && ctx.roomId && ctx.user) {
-          localStorage.setItem("cube-racer-player-id", ctx.user.id);
-          localStorage.setItem("cube-racer-player-name", ctx.user.name);
-          router.replace(`/room/${ctx.roomId}`);
-          return;
-        }
-      } catch (err) {
-        console.error("Discord bootstrap failed", err);
-        setBootingDiscord(false);
-      } finally {
-        console.log("Not a discord user")
-        setBootingDiscord(false);
-      }
-    }
-
-    bootDiscord();
-  }, [router]);
 
   function validateName(name: string) {
     return name.trim().length >= 2;
@@ -100,17 +69,6 @@ export default function HomePage() {
     getOrCreatePlayerId();
 
     router.push(`/room/${trimmedCode}`);
-  }
-
-  if (bootingDiscord) {
-    return (
-      <main className="min-h-screen bg-gray-100 px-6 py-12 text-black">
-        <div className="mx-auto max-w-2xl rounded-3xl border border-gray-300 bg-white p-8 shadow-sm">
-          <h1 className="text-4xl font-bold tracking-tight text-black">CubeRoom</h1>
-          <p className="mt-3 text-gray-700">Loading…</p>
-        </div>
-      </main>
-    );
   }
 
   return (
