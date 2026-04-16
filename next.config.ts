@@ -1,9 +1,5 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
-  allowedDevOrigins: ['*.discordsays.com', '*.lhr.life'],
-
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;

@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { getDiscordActivityContext } from "@/lib/discord";
 
 function generateRoomCode(length = 6) {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -30,36 +29,6 @@ export default function HomePage() {
   const [playerName, setPlayerName] = useState("");
   const [joinCode, setJoinCode] = useState("");
   const [error, setError] = useState("");
-  const [bootingDiscord, setBootingDiscord] = useState(true);
-
-  useEffect(() => {
-    const savedName = localStorage.getItem("cube-racer-player-name");
-    if (savedName) {
-      setPlayerName(savedName);
-    }
-
-    async function bootDiscord() {
-      try {
-        console.log("Getting discord status")
-        const ctx = await getDiscordActivityContext();
-        console.log(ctx)
-        if (ctx.isDiscord && ctx.roomId && ctx.user) {
-          localStorage.setItem("cube-racer-player-id", ctx.user.id);
-          localStorage.setItem("cube-racer-player-name", ctx.user.name);
-          router.replace(`/room/${ctx.roomId}`);
-          return;
-        }
-      } catch (err) {
-        console.error("Discord bootstrap failed", err);
-        setBootingDiscord(false);
-      } finally {
-        console.log("Not a discord user")
-        setBootingDiscord(false);
-      }
-    }
-
-    bootDiscord();
-  }, [router]);
 
   function validateName(name: string) {
     return name.trim().length >= 2;
@@ -102,31 +71,20 @@ export default function HomePage() {
     router.push(`/room/${trimmedCode}`);
   }
 
-  if (bootingDiscord) {
-    return (
-      <main className="min-h-screen bg-gray-100 px-6 py-12 text-black">
-        <div className="mx-auto max-w-2xl rounded-3xl border border-gray-300 bg-white p-8 shadow-sm">
-          <h1 className="text-4xl font-bold tracking-tight text-black">CubeRoom</h1>
-          <p className="mt-3 text-gray-700">Loading…</p>
-        </div>
-      </main>
-    );
-  }
-
   return (
-    <main className="min-h-screen bg-gray-100 px-6 py-12 text-black">
-      <div className="mx-auto max-w-2xl">
-        <div className="rounded-3xl border border-gray-300 bg-white p-8 shadow-sm">
-          <h1 className="text-4xl font-bold tracking-tight text-black">
+    <main className="h-full bg-gray-100 dark:bg-gray-900 flex items-center justify-center px-6 text-black dark:text-white">
+      <div className="w-full max-w-2xl">
+        <div className="rounded-3xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-8 shadow-sm">
+          <h1 className="text-4xl font-bold tracking-tight">
             CubeRoom
           </h1>
 
-          <p className="mt-3 text-gray-700">
+          <p className="mt-3 text-gray-700 dark:text-gray-300">
             Race your friends on the same scramble inside a shared room.
           </p>
 
           <div className="mt-8">
-            <label className="mb-2 block text-sm font-medium text-gray-800">
+            <label className="mb-2 block text-sm font-medium text-gray-800 dark:text-gray-200">
               Your name
             </label>
             <input
@@ -134,14 +92,14 @@ export default function HomePage() {
               value={playerName}
               onChange={(e) => setPlayerName(e.target.value)}
               placeholder="Enter your name"
-              className="w-full rounded-2xl border border-gray-300 bg-white px-4 py-3 text-black placeholder:text-gray-400 outline-none transition focus:border-black"
+              className="w-full rounded-2xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-black dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none transition focus:border-black dark:focus:border-gray-300"
             />
           </div>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             <button
               onClick={handleCreateRoom}
-              className="rounded-2xl border border-black bg-white px-4 py-3 font-medium text-black transition hover:bg-black hover:text-white"
+              className="rounded-2xl border border-black dark:border-gray-300 bg-white dark:bg-gray-800 px-4 py-3 font-medium transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
             >
               Create Room
             </button>
@@ -152,11 +110,11 @@ export default function HomePage() {
                 value={joinCode}
                 onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
                 placeholder="Room code"
-                className="min-w-0 flex-1 rounded-2xl border border-gray-300 bg-white px-4 py-3 text-black placeholder:text-gray-400 outline-none transition focus:border-black"
+                className="min-w-0 flex-1 rounded-2xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-black dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none transition focus:border-black dark:focus:border-gray-300"
               />
               <button
                 onClick={handleJoinRoom}
-                className="rounded-2xl border border-black bg-white px-4 py-3 font-medium text-black transition hover:bg-black hover:text-white"
+                className="rounded-2xl border border-black dark:border-gray-300 bg-white dark:bg-gray-800 px-4 py-3 font-medium transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
               >
                 Join
               </button>
