@@ -19,14 +19,14 @@ export function TimerPanel({
   onReset,
 }: Props) {
   return (
-    <div className="flex flex-col items-center rounded-2xl border border-gray-200 bg-white shadow-sm p-8 text-center">
-      <div className="text-sm font-medium text-gray-500">Timer</div>
+    <div className="flex flex-col items-center rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm p-4 text-center">
+      <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Timer</div>
 
-      <div className="mt-3 text-6xl font-bold tracking-tight">
+      <div className="mt-1.5 text-5xl font-bold tracking-tight">
         {formatTime(pendingResult?.timeMs ?? elapsedMs)}
       </div>
 
-      <div className="mt-4 text-sm text-gray-600">
+      <div className="mt-3 text-sm text-gray-600 dark:text-gray-400">
         {!currentPlayerSubmitted && timerState === "idle" && "Hold space to prepare"}
         {!currentPlayerSubmitted && timerState === "holding" && "Release space to start"}
         {!currentPlayerSubmitted && timerState === "running" && "Press space to stop"}
@@ -35,17 +35,17 @@ export function TimerPanel({
       </div>
 
       {pendingResult && !currentPlayerSubmitted && (
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
           <button
             onClick={onSubmit}
-            className="rounded-2xl border border-black bg-white px-4 py-3 font-medium text-black transition hover:bg-black hover:text-white"
+            className="rounded-2xl border border-black dark:border-gray-300 bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
           >
             Submit {formatTime(pendingResult.timeMs)}
           </button>
 
           <button
             onClick={onReset}
-            className="rounded-2xl border border-gray-300 bg-white px-4 py-3 font-medium text-gray-700 transition hover:border-black hover:text-black"
+            className="rounded-2xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 transition hover:border-black dark:hover:border-gray-200 hover:text-black dark:hover:text-white"
           >
             Reset
           </button>

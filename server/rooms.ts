@@ -1,5 +1,5 @@
-import { Room, Submission } from "@/lib/types";
-import { generateScramble } from "@/lib/scramble";
+import { Room, Submission } from "./lib/types";
+import { generateScramble } from "./lib/scramble";
 
 const rooms = new Map<string, Room>();
 

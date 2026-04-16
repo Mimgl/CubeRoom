@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "tsx server/index.ts",
+    "dev:web": "next dev",
+    "dev:server": "tsx server/index.ts",
     "build": "next build",
-    "start": "NODE_ENV=production tsx server/index.ts"
+    "start:web": "next start",
+    "start:server": "NODE_ENV=production tsx server/index.ts"
   },
   "dependencies": {
-    "@discord/embedded-app-sdk": "^2.4.1",
     "express": "^5.2.1",
     "next": "16.2.2",
     "react": "19.2.4",

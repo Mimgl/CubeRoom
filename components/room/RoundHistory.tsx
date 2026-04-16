@@ -21,71 +21,61 @@ type Props = {
 };
 
 export function RoundHistory({ rounds }: Props) {
-  if (!rounds || rounds.length === 0) return null;
-
   return (
-    <div className="mt-8 rounded-2xl border border-gray-200 p-6">
-      <div className="text-sm font-medium text-gray-500">
+    <div className="flex flex-col min-h-0 h-full">
+      <div className="text-sm font-medium text-gray-500 dark:text-gray-400 shrink-0">
         Round history
       </div>
 
-      <div className="mt-1 text-sm text-gray-600">
-        Completed rounds are kept here. The winning solve stays highlighted.
-      </div>
-
-      <div className="mt-6 overflow-x-auto">
-        <div className="flex min-w-max gap-4 pb-2">
+      {rounds.length === 0 ? (
+        <p className="mt-3 text-sm text-gray-400 dark:text-gray-500">
+          Completed rounds will appear here.
+        </p>
+      ) : (
+        <div className="mt-3 flex flex-col gap-3 overflow-y-auto min-h-0">
           {[...rounds].reverse().map((round) => (
             <div
               key={round.roundNumber}
-              className="w-80 shrink-0 rounded-2xl border border-gray-200 bg-gray-50 p-4"
+              className="rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-3 shrink-0"
             >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="font-semibold text-black">
-                    Round {round.roundNumber}
-                  </div>
-
-                  <div className="mt-1 line-clamp-2 font-mono text-xs text-gray-600">
-                    {round.scramble}
-                  </div>
-                </div>
+              <div className="font-semibold text-sm text-black dark:text-white">
+                Round {round.roundNumber}
               </div>
 
-              <div className="mt-4 space-y-3">
-                {round.results.map((result, index) => {
-                  const isWinner = index === 0;
+              <div className="mt-0.5 font-mono text-xs text-gray-500 dark:text-gray-400 break-words">
+                {round.scramble}
+              </div>
 
-                  return (
-                    <div
-                      key={result.playerId}
-                      className="grid grid-cols-[auto_1fr_auto] items-center gap-3"
-                    >
-                      <div className="text-xs font-medium text-gray-500">
-                        #{index + 1}
-                      </div>
-
-                      <div className="truncate text-sm font-medium text-black">
-                        {result.playerName}
-                      </div>
-
-                      <div
-                        className={`font-mono text-sm ${
-                          isWinner
-                            ? "text-green-600 font-semibold"
-                            : "text-gray-700"
-                        }`}
-                      >
-                        {formatTime(result.submission.timeMs)}
-                      </div>
+              <div className="mt-2 space-y-1.5">
+                {round.results.map((result, index) => (
+                  <div
+                    key={result.playerId}
+                    className="grid grid-cols-[auto_1fr_auto] items-center gap-2"
+                  >
+                    <div className="text-xs font-medium text-gray-400 dark:text-gray-500">
+                      #{index + 1}
                     </div>
-                  );
-                })}
+
+                    <div className="truncate text-xs font-medium text-black dark:text-white">
+                      {result.playerName}
+                    </div>
+
+                    <div
+                      className={`font-mono text-xs ${
+                        index === 0
+                          ? "text-green-600 dark:text-green-400 font-semibold"
+                          : "text-gray-600 dark:text-gray-400"
+                      }`}
+                    >
+                      {formatTime(result.submission.timeMs)}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           ))}
         </div>
-      </div>
+      )}
     </div>
   );
 }
