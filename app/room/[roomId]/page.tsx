@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useRoomSocket } from "@/hooks/useRoomSocket";
 import { useTimer } from "@/hooks/useTimer";
 import { getSocket } from "@/lib/socket";
@@ -14,6 +14,7 @@ import { RoundHistory } from "@/components/room/RoundHistory";
 
 export default function Page() {
   const { roomId } = useParams();
+  const router = useRouter();
 
   const { room, playerId, playerName } = useRoomSocket(roomId as string);
   const timer = useTimer(room, playerId);
@@ -48,6 +49,10 @@ export default function Page() {
     timer.setPendingResult(null);
     timer.setElapsedMs(0);
     timer.setTimerState("idle");
+  }
+
+  function handleLeaveRoom() {
+    router.push("/");
   }
 
   function handleSendFirstScramble() {
@@ -96,6 +101,7 @@ export default function Page() {
           playerName={playerName}
           isHost={isHost}
           onSendScramble={handleSendFirstScramble}
+          onLeaveRoom={handleLeaveRoom}
         />
 
         {!room.currentScramble && !isHost && (
