@@ -3,9 +3,10 @@ type Props = {
   playerName: string;
   isHost: boolean;
   onSendScramble: () => void;
+  onLeaveRoom: () => void;
 };
 
-export function RoomHeader({ room, playerName, isHost, onSendScramble }: Props) {
+export function RoomHeader({ room, playerName, isHost, onSendScramble, onLeaveRoom }: Props) {
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between border-b border-gray-200 dark:border-gray-700 pb-4 shrink-0">
       <div>
@@ -28,14 +29,23 @@ export function RoomHeader({ room, playerName, isHost, onSendScramble }: Props) 
         </p>
       </div>
 
-      {!room.currentScramble && isHost && (
+      <div className="flex gap-2">
+        {!room.currentScramble && isHost && (
+          <button
+            onClick={onSendScramble}
+            className="rounded-2xl border border-black dark:border-gray-300 bg-white dark:bg-gray-800 px-4 py-3 font-medium transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
+          >
+            Send Scramble
+          </button>
+        )}
+
         <button
-          onClick={onSendScramble}
-          className="rounded-2xl border border-black dark:border-gray-300 bg-white dark:bg-gray-800 px-4 py-3 font-medium transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
+          onClick={onLeaveRoom}
+          className="rounded-2xl border border-red-500 bg-white dark:bg-gray-800 px-4 py-3 font-medium text-red-500 transition hover:bg-red-500 hover:text-white"
         >
-          Send Scramble
+          Leave Room
         </button>
-      )}
+      </div>
     </div>
   );
 }
